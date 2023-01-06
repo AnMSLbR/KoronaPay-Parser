@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Net;
 
 namespace KoronaPayParserLib
@@ -46,7 +47,7 @@ namespace KoronaPayParserLib
         public string GetExchangeRate()
         {
             if (_response != null)
-                return _response["exchangeRate"].ToString();
+                return (_response["exchangeRate"] ?? "1,00").ToString();
             else
                 return "N\\D";
         }
@@ -99,6 +100,31 @@ namespace KoronaPayParserLib
             }
             else
                 return "N\\D";
+        }
+
+        public string GetSendingCurrency()
+        {
+            return _sendingCurrency;
+        }
+
+        public string GetReceivingCurrency()
+        {
+            if (_response != null)
+                return _response["receivingCurrency"]["code"].ToString();
+            else
+                return string.Empty;
+        }
+
+        public List<string> GetCountries()
+        {
+            List<string> countries = new List<string>(_dataStorage.Countries.Keys);
+            return countries;
+        }
+
+        public List<string> GetCurrencies(string country)
+        {
+            List<string> currencies = _dataStorage.Countries[country];
+            return currencies;
         }
 
     }

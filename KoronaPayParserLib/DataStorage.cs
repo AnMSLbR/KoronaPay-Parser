@@ -38,6 +38,8 @@ namespace KoronaPayParserLib
             ["GEL"] = "981",
         };
 
+        public Dictionary<string, List<string>> Countries { get => countries; private set => countries = value; }
+
         public string GetCurrencyId(string currency)
         {
             if (currencies.ContainsKey(currency.ToUpper()))
