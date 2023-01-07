@@ -31,9 +31,9 @@ namespace KoronaPayParserLib
                 _getRequest.Run();
                 _response = JArray.Parse(_getRequest.Response)[0];
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
@@ -54,10 +54,16 @@ namespace KoronaPayParserLib
 
         public string GetReceivingAmount()
         {
-            if (_receivingAmount.Length > 2)
-                return $"{_receivingAmount.Substring(0, _receivingAmount.Length - 2)},{_receivingAmount.Substring(_receivingAmount.Length - 2)}";
+            if (_response != null)
+            {
+                var receivingAmount = _response["receivingAmount"].ToString();
+                if (receivingAmount.Length > 2)
+                    return $"{receivingAmount.Substring(0, receivingAmount.Length - 2)},{receivingAmount.Substring(receivingAmount.Length - 2)}";
+                else
+                    return receivingAmount;
+            }
             else
-                return _receivingAmount;
+                return "N\\D";
         }
 
         public string GetSendingAmount()
@@ -104,7 +110,10 @@ namespace KoronaPayParserLib
 
         public string GetSendingCurrency()
         {
-            return _sendingCurrency;
+            if (_response != null)
+                return _response["sendingCurrency"]["code"].ToString();
+            else
+                return string.Empty;
         }
 
         public string GetReceivingCurrency()

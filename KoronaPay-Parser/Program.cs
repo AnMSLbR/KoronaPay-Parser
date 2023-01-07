@@ -19,11 +19,18 @@ while (!parser.GetCurrencies(country).Contains(currency))
     currency = Console.ReadLine().ToUpper();
 }
 
-parser.Parse(country, currency);
+try
+{
+    parser.Parse(country, currency);
+    Console.WriteLine($"Exchange rate: {parser.GetExchangeRate()} {parser.GetSendingCurrency()}");
+    Console.WriteLine($"Transfer amount: {parser.GetReceivingAmount()} {parser.GetReceivingCurrency()}");
+    Console.WriteLine($"Transfer amount without commision: {parser.GetSendingAmountWithoutCommission()} {parser.GetSendingCurrency()}");
+    Console.WriteLine($"Commission: {parser.GetSendingCommission()} {parser.GetSendingCurrency()}");
+    Console.WriteLine($"Total transfer amount: {parser.GetSendingAmount()} {parser.GetSendingCurrency()}");
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.Message);
+}
 
-Console.WriteLine($"Exchange rate: {parser.GetExchangeRate()} {parser.GetSendingCurrency()}");
-Console.WriteLine($"Transfer amount: {parser.GetReceivingAmount()} {parser.GetReceivingCurrency()}");
-Console.WriteLine($"Transfer amount without commision: {parser.GetSendingAmountWithoutCommission()} {parser.GetSendingCurrency()}");
-Console.WriteLine($"Commission: {parser.GetSendingCommission()} {parser.GetSendingCurrency()}");
-Console.WriteLine($"Total transfer amount: {parser.GetSendingAmount()} {parser.GetSendingCurrency()}");
 Console.ReadKey();
