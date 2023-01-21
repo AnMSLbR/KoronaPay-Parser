@@ -26,6 +26,7 @@ namespace KoronaPayParserLib
             {
                 string receivingCurrencyId = _dataStorage.GetCurrencyId(receivingCurrency);
                 string sendingCurrencyId = _dataStorage.GetCurrencyId(_sendingCurrency);
+                //eceivingAmount = string.Concat(receivingAmount, "00");
                 string address = ConfigureAddress(_sendingCountry, sendingCurrencyId, receivingCountry.ToUpper(), receivingCurrencyId, _receivingAmount);
                 _getRequest = new GetRequest(address);
                 _getRequest.Run();
@@ -135,6 +136,5 @@ namespace KoronaPayParserLib
             List<string> currencies = _dataStorage.Countries[country];
             return currencies;
         }
-
     }
 }
