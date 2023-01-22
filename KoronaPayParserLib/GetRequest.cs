@@ -37,19 +37,6 @@ namespace KoronaPayParserLib
                     }
                 }
             }
-            catch (WebException ex)
-            {
-                string text;
-                using (WebResponse response = ex.Response)
-                {
-                    HttpWebResponse httpResponse = (HttpWebResponse)response;
-                    using Stream data = response.GetResponseStream();
-                    using var reader = new StreamReader(data);
-                        text = reader.ReadToEnd();
-                }
-                var message = JObject.Parse(text);
-                throw new WebException($"{message["message"]}");
-            }
             catch (Exception)
             {
                 throw;
