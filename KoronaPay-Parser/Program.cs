@@ -19,31 +19,30 @@ while (!parser.GetCurrencies(country).Contains(currency))
     currency = Console.ReadLine().ToUpper();
 }
 
-Console.WriteLine("Enter the transfer amount:");
-var amount = Console.ReadLine();
-while (!Int32.TryParse(amount, out int digits))
-{
-    Console.WriteLine("Invalid amount. Enter the transfer amount:");
-    amount = Console.ReadLine();
-}
-
 while (true)
 {
-    try
+    Console.WriteLine("Enter the transfer amount:");
+    var amount = Console.ReadLine();
+    if (!Int32.TryParse(amount, out int digits))
     {
-        parser.Parse(country, currency, amount);
-        Console.WriteLine($"Exchange rate: {parser.GetExchangeRate()} {parser.GetSendingCurrency()}");
-        Console.WriteLine($"Transfer amount: {parser.GetReceivingAmount()} {parser.GetReceivingCurrency()}");
-        Console.WriteLine($"Transfer amount without commision: {parser.GetSendingAmountWithoutCommission()} {parser.GetSendingCurrency()}");
-        Console.WriteLine($"Commission: {parser.GetSendingCommission()} {parser.GetSendingCurrency()}");
-        Console.WriteLine($"Total transfer amount: {parser.GetSendingAmount()} {parser.GetSendingCurrency()}");
-        break;
+        Console.WriteLine("Invalid amount.");
     }
-    catch (Exception ex)
+    else
     {
-        Console.WriteLine(ex.Message);
-        Console.WriteLine("Enter the transfer amount:");
-        amount = Console.ReadLine();
+        try
+        {
+            parser.Parse(country, currency, amount);
+            Console.WriteLine($"Exchange rate: {parser.GetExchangeRate()} {parser.GetSendingCurrency()}");
+            Console.WriteLine($"Transfer amount: {parser.GetReceivingAmount()} {parser.GetReceivingCurrency()}");
+            Console.WriteLine($"Transfer amount without commision: {parser.GetSendingAmountWithoutCommission()} {parser.GetSendingCurrency()}");
+            Console.WriteLine($"Commission: {parser.GetSendingCommission()} {parser.GetSendingCurrency()}");
+            Console.WriteLine($"Total transfer amount: {parser.GetSendingAmount()} {parser.GetSendingCurrency()}");
+            break;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 }
 

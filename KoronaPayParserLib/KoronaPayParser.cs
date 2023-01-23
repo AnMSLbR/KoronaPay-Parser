@@ -41,16 +41,13 @@ namespace KoronaPayParserLib
                     text = reader.ReadToEnd();
                 }
                 var message = JObject.Parse(text);
-
-                if (message["code"].ToString() == "1")
+                if (message["code"].ToString() == "3")
                 {
-                    throw new WebException($"{message["message"]}");
+                    var limitRange = _dataStorage.Limits.Keys.Contains(receivingCountry) ? _dataStorage.Limits[receivingCountry] : _dataStorage.Limits["Other"];
+                    throw new WebException($"{message["message"]}. Amount must be equivalent to {limitRange} per transfer.");
                 }
-                else if (message["code"].ToString() == "3")
-                {
-                    throw new WebException($"{message["message"]}. Amount must be equivalent to 1...5,000 USD.");
-                }
-                
+                else
+                    throw ex;
             }
             catch (Exception ex)
             {

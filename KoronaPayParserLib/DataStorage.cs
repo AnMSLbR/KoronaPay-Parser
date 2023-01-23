@@ -38,7 +38,15 @@ namespace KoronaPayParserLib
             ["GEL"] = "981",
         };
 
+        Dictionary<string, string> limits = new Dictionary<string, string>()
+        {
+            ["GEO"] = "1...2000 USD",
+            ["CYP"] = "1...3000 EUR",
+            ["Other"] = "1...5000 USD",
+        };
+
         public Dictionary<string, List<string>> Countries { get => countries; private set => countries = value; }
+        public Dictionary<string, string> Limits { get => limits; private set => limits = value; }
 
         public string GetCurrencyId(string currency)
         {
