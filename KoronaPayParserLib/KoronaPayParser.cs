@@ -32,22 +32,23 @@ namespace KoronaPayParserLib
             }
             catch (WebException ex)
             {
-                string text;
+                string text = String.Empty;
                 using (WebResponse response = ex.Response)
                 {
-                    HttpWebResponse httpResponse = (HttpWebResponse)response;
-                    using Stream data = response.GetResponseStream();
-                    using var reader = new StreamReader(data);
-                    text = reader.ReadToEnd();
-                }
-                var message = JObject.Parse(text);
-                if (message["code"].ToString() == "3")
-                {
-                    var limitRange = _dataStorage.Limits.Keys.Contains(receivingCountry) ? _dataStorage.Limits[receivingCountry] : _dataStorage.Limits["Other"];
-                    throw new WebException($"{message["message"]}. Amount must be equivalent to {limitRange} per transfer.");
-                }
-                else
+                    if (response != null)
+                    {
+                        using Stream data = response.GetResponseStream();
+                        using var reader = new StreamReader(data);
+                        text = reader.ReadToEnd();
+                        var message = JObject.Parse(text);
+                        if (message["code"].ToString() == "3")
+                        {
+                            var limitRange = _dataStorage.Limits.Keys.Contains(receivingCountry) ? _dataStorage.Limits[receivingCountry] : _dataStorage.Limits["Other"];
+                            throw new WebException($"{message["message"]}. Amount must be equivalent to {limitRange} per transfer.");
+                        }
+                    }
                     throw ex;
+                }
             }
             catch (Exception ex)
             {
