@@ -5,7 +5,7 @@
 
 Console application for parsing the exchange rate from the KoronaPay service.
 
-![Console](https://cdn.discordapp.com/attachments/828381311831375914/1061431977011593286/Console.PNG)
+![Console](https://cdn.discordapp.com/attachments/828381311831375914/1067061890322268160/110.PNG)
 
 ## Downloads
 App on Windows are available in the [Releases](https://github.com/AnMSLbR/KoronaPay-Parser/releases) section.
