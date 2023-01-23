@@ -8,7 +8,6 @@ namespace KoronaPayParserLib
     {
         string _sendingCountry;
         string _sendingCurrency;
-        string _receivingAmount;
         GetRequest _getRequest;
         JToken _response;
         DataStorage _dataStorage;
@@ -17,19 +16,38 @@ namespace KoronaPayParserLib
             _dataStorage = new DataStorage();
             _sendingCountry = "RUS";
             _sendingCurrency = "RUB";
-            _receivingAmount = (100 * 100).ToString();
         }
 
-        public void Parse(string receivingCountry, string receivingCurrency)
+        public void Parse(string receivingCountry, string receivingCurrency, string receivingAmount)
         {
             try
             {
                 string receivingCurrencyId = _dataStorage.GetCurrencyId(receivingCurrency);
                 string sendingCurrencyId = _dataStorage.GetCurrencyId(_sendingCurrency);
-                string address = ConfigureAddress(_sendingCountry, sendingCurrencyId, receivingCountry.ToUpper(), receivingCurrencyId, _receivingAmount);
+                receivingAmount = string.Concat(receivingAmount, "00");
+                string address = ConfigureAddress(_sendingCountry, sendingCurrencyId, receivingCountry.ToUpper(), receivingCurrencyId, receivingAmount);
                 _getRequest = new GetRequest(address);
                 _getRequest.Run();
                 _response = JArray.Parse(_getRequest.Response)[0];
+            }
+            catch (WebException ex)
+            {
+                string text;
+                using (WebResponse response = ex.Response)
+                {
+                    HttpWebResponse httpResponse = (HttpWebResponse)response;
+                    using Stream data = response.GetResponseStream();
+                    using var reader = new StreamReader(data);
+                    text = reader.ReadToEnd();
+                }
+                var message = JObject.Parse(text);
+                if (message["code"].ToString() == "3")
+                {
+                    var limitRange = _dataStorage.Limits.Keys.Contains(receivingCountry) ? _dataStorage.Limits[receivingCountry] : _dataStorage.Limits["Other"];
+                    throw new WebException($"{message["message"]}. Amount must be equivalent to {limitRange} per transfer.");
+                }
+                else
+                    throw ex;
             }
             catch (Exception ex)
             {
@@ -135,6 +153,5 @@ namespace KoronaPayParserLib
             List<string> currencies = _dataStorage.Countries[country];
             return currencies;
         }
-
     }
 }

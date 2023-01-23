@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,7 +11,6 @@ namespace KoronaPayParserLib
     internal class GetRequest
     {
         HttpWebRequest _request;
-        HttpWebResponse _response;
         string _address;
 
         public string Response { get; set; }
@@ -23,12 +23,19 @@ namespace KoronaPayParserLib
         {
             _request = (HttpWebRequest)WebRequest.Create(_address);
             _request.Method = "GET";
+            _request.Headers.Add("accept-language", "en");
 
             try
             {
-                _response = (HttpWebResponse)_request.GetResponse();
-                var stream = _response.GetResponseStream();
-                if (stream != null) Response = new StreamReader(stream).ReadToEnd();
+                using (var _response = (HttpWebResponse)_request.GetResponse())
+                {
+                    var stream = _response.GetResponseStream();
+                    if (stream != null)
+                    {
+                        using var reader = new StreamReader(stream);
+                            Response = reader.ReadToEnd();
+                    }
+                }
             }
             catch (Exception)
             {
