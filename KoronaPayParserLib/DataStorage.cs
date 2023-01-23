@@ -45,8 +45,27 @@ namespace KoronaPayParserLib
             ["Other"] = "1...5000 USD",
         };
 
+        Dictionary<string, string> countriesFullForm = new Dictionary<string, string>()
+        {
+            ["AZE"] = "Azerbaijan",
+            ["BLR"] = "Belarus",
+            ["CYP"] = "Cyprus",
+            ["GEO"] = "Georgia",
+            ["ISR"] = "Israel",
+            ["KAZ"] = "Kazakhstan",
+            ["KGZ"] = "Kyrgyzstan",
+            ["MDA"] = "Moldova",
+            ["SRB"] = "Serbia",
+            ["KOR"] = "South Korea",
+            ["TJK"] = "Tajikistan",
+            ["TUR"] = "Turkey",
+            ["UZB"] = "Uzbekistan",
+            ["VNM"] = "Vietnam",
+        };
+
         public Dictionary<string, List<string>> Countries { get => countries; private set => countries = value; }
         public Dictionary<string, string> Limits { get => limits; private set => limits = value; }
+        public Dictionary<string, string> CountriesFullForm { get => countriesFullForm; private set => countriesFullForm = value; }
 
         public string GetCurrencyId(string currency)
         {
